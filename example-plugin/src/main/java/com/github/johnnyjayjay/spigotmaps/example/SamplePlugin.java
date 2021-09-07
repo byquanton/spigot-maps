@@ -18,10 +18,9 @@ public class SamplePlugin extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String name, String[] args) {
-        if (!(sender instanceof Player))
+        if (!(sender instanceof Player player))
             return false;
 
-        Player player = (Player) sender;
         try {
             if (name.equals("bigimage")) {
                 URL imageUrl = new URL(args[0]);
@@ -29,9 +28,7 @@ public class SamplePlugin extends JavaPlugin {
                         .map(ImageRenderer::create)
                         .map(RenderedMap::create)
                         .map(RenderedMap::createItemStack)
-                        .forEach(item -> {
-                            player.getWorld().dropItem(player.getLocation(), item);
-                        });
+                        .forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
                 return true;
             } else if (name.equals("biggif")) {
                 GifDecoder decoder = new GifDecoder();
@@ -63,14 +60,15 @@ public class SamplePlugin extends JavaPlugin {
     }
 
     private RenderedMap createMap(Player player, String kind, String text) throws IOException {
-        MapRenderer renderer = switch (kind) {
+        MapRenderer renderer;
+        switch (kind) {
             case "image" -> {
                 URL imageUrl = new URL(text);
                 BufferedImage image = ImageTools.resizeToMapSize(ImageTools.loadWithUserAgentFrom(imageUrl));
-                break ImageRenderer.builder().addPlayers(player).image(image).build();
+                renderer = ImageRenderer.builder().addPlayers(player).image(image).build();
             }
-            case "text" -> SimpleTextRenderer.builder().addPlayers(player).addText(text).build();
-            case "atext" -> AnimatedTextRenderer.builder().addPlayers(player).addText(text).build();
+            case "text" -> renderer = SimpleTextRenderer.builder().addPlayers(player).addText(text).build();
+            case "atext" -> renderer = AnimatedTextRenderer.builder().addPlayers(player).addText(text).build();
             case "gif" -> {
                 GifDecoder decoder = new GifDecoder();
                 int code = decoder.read(text);
@@ -78,14 +76,14 @@ public class SamplePlugin extends JavaPlugin {
                     throw new IOException("Could not load gif image. Code: " + code);
 
                 GifImage gif = ImageTools.resizeToMapSize(GifImage.fromDecoder(decoder));
-                break GifRenderer.builder()
+                renderer = GifRenderer.builder()
                         .addPlayers(player)
                         .gif(gif)
                         .repeat(decoder.getLoopCount() == 0 ? GifRenderer.REPEAT_FOREVER : decoder.getLoopCount())
                         .build();
             }
             default -> throw new AssertionError();
-        };
+        }
         return MapBuilder.create().world(player.getWorld()).addRenderers(renderer).build();
     }
 }

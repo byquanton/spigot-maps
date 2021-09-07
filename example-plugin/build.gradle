@@ -1,13 +1,13 @@
 plugins {
     id 'java'
-    id 'maven'
-    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 group 'com.github.johnnyjayjay'
 version '1.0-TEST'
 
-sourceCompatibility = 12
+sourceCompatibility = JavaVersion.VERSION_14
 
 repositories {
     maven {
@@ -16,7 +16,7 @@ repositories {
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
-	jcenter()
+    maven {url = 'https://jitpack.io'}
 	mavenCentral()
 }
 
@@ -25,9 +25,6 @@ dependencies {
     implementation "com.github.johnnyjayjay:spigot-maps:2.1"
 }
 
-tasks.withType(JavaCompile).each {
-    it.options.compilerArgs.add('--enable-preview')
-}
 
 compileJava.options.encoding "UTF-8"
 
