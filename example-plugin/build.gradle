@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT"
-    implementation "com.github.johnnyjayjay:spigot-maps:2.1"
+    implementation "com.github.johnnyjayjay:spigot-maps:2.1.1"
 }
 
 
