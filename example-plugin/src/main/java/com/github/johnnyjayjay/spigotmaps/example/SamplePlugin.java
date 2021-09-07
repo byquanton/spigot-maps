@@ -18,9 +18,10 @@ public class SamplePlugin extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String name, String[] args) {
-        if (!(sender instanceof Player player))
+        if (!(sender instanceof Player))
             return false;
 
+        Player player = (Player) sender;
         try {
             if (name.equals("bigimage")) {
                 URL imageUrl = new URL(args[0]);

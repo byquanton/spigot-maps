@@ -42,22 +42,6 @@ artifacts {
     archives shadowJar
 }
 
-bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
-    publications = ["SpigotMaps"]
-    pkg {
-        version {
-            name = project.version
-            released = new Date()
-        }
-        repo = "spigot-maps"
-        name = "spigot-maps"
-        vcsUrl = "https://github.com/johnnyjayjay/spigot-maps.git"
-    }
-    publish = true
-}
-
 def pomConfig = {
     licenses {
         license {
